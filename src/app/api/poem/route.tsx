@@ -60,35 +60,35 @@ export async function GET() {
     }
 }
 
-export async function getPoembyID(id: string ){
-    try {
-        const poem = await prisma.poem.findUnique({
-            where: {
-                id: id,
-            },
-        });
-        if (poem) {
-            return NextResponse.json(poem, { status: 200 });
-        } else {
-            return NextResponse.json({ error: 'Poem not found' }, { status: 404 });
-        }
-    } catch (error) {
-        console.error('Error getting poem by ID:', error);
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-    }
-}
+// export async function getPoembyID(id: string ){
+//     try {
+//         const poem = await prisma.poem.findUnique({
+//             where: {
+//                 id: id,
+//             },
+//         });
+//         if (poem) {
+//             return NextResponse.json(poem, { status: 200 });
+//         } else {
+//             return NextResponse.json({ error: 'Poem not found' }, { status: 404 });
+//         }
+//     } catch (error) {
+//         console.error('Error getting poem by ID:', error);
+//         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+//     }
+// }
 
 
-export async function deletePoem(id:string){
-    try{
-         await prisma.poem.delete({
-            where:{
-                id:id
-            }
-        })
-    }
-    catch(error){
-        console.error('error deleting poem', error)
-        NextResponse.json({error:"Internal Server Errror" , status:500})
-    }
-}
+// export async function deletePoem(id:string){
+//     try{
+//          await prisma.poem.delete({
+//             where:{
+//                 id:id
+//             }
+//         })
+//     }
+//     catch(error){
+//         console.error('error deleting poem', error)
+//         NextResponse.json({error:"Internal Server Errror" , status:500})
+//     }
+// }
