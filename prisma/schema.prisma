@@ -1,0 +1,43 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Poem {
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  verses    Verse[]
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt()
+  published Boolean  @default(false)
+  tags      String[]
+}
+
+model Verse {
+  id        String   @id @default(cuid())
+  sadr      String   // صدر البيت
+  ajz       String   // عجز البيت
+  order     Int      // ترتيب البيت في القصيدة
+  poem      Poem     @relation(fields: [poemId], references: [id], onDelete: Cascade)
+  poemId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // @@unique([poemId, order]) // لضمان عدم تكرار الترتيب في نفس القصيدة
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  poems     Poem[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+} 
