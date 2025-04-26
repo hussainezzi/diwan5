@@ -1,6 +1,9 @@
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:1217083274.
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:1670261712.
 import { NextRequest, NextResponse } from 'next/server';
-import bcrypt from 'bcrypt';
+
 import { PrismaClient } from '@prisma/client';
+
 
 const prisma = new PrismaClient();
 
@@ -12,7 +15,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Username and password are required' }, { status: 400 });
     }
 
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await prisma.user.findFirst({
       where: { username },
     });
 
@@ -20,12 +23,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Username already exists' }, { status: 409 });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     const newUser = await prisma.user.create({
       data: {
         username,
-        password: hashedPassword,
+        password: password,
       },
     });
 

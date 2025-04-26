@@ -1,8 +1,10 @@
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:1986656091.
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:2404892152.
 import { NextRequest, NextResponse } from 'next/server';
-import bcrypt from 'bcrypt';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../../../../prisma/client';
 
-const prisma = new PrismaClient();
+
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,7 +14,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Username and password are required' }, { status: 400 });
     }
 
-    const user = await prisma.user.findUnique({
+    const user = await prisma.User.findUnique({
       where: { username },
     });
 
@@ -20,9 +22,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Invalid username or password' }, { status: 401 });
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
-
-    if (!passwordMatch) {
+    if (password!== user.password) {
       return NextResponse.json({ message: 'Invalid username or password' }, { status: 401 });
     }
 
