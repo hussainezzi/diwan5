@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../prisma/client";
+import { json } from "stream/consumers";
 // import prisma from "@prisma/client";
 
 export async function POST(req: NextRequest) {
@@ -11,6 +12,7 @@ export async function POST(req: NextRequest) {
         if (!title || !Array.isArray(verses) || !verses.length  ) {
             return NextResponse.json({ error: 'Please provide a title, verses, tags, and authorId' }, { status: 400 });
         }
+        console.log('Creating new poem...' , { title, verses, tags, authorId });
 
         const newPoem = await prisma.poem.create({
             data: {
@@ -30,6 +32,8 @@ export async function POST(req: NextRequest) {
                 author: true
             }
         });
+
+        console.log('New poem created:', newPoem);
 
         return NextResponse.json(newPoem, { status: 201 });
     } catch (error:any) {
@@ -56,6 +60,7 @@ export async function GET() {
         return NextResponse.json(poems);
     } catch (error) {
         console.error('Error getting poems:', error);
+        console.log(JSON.stringify(error, null , 2))
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
